@@ -10,11 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['nome'];
     $preco = str_replace(',', '.', $_POST['preco']);
     $descricao = $_POST['descricao'];
-    $quantidade = $_POST['quantidade']; // Nova variável para quantidade
-    $fornecedor_id = $_POST['fornecedor']; // ID do fornecedor selecionado
+    $quantidade = $_POST['quantidade'];
+    $fornecedor_id = $_POST['fornecedor'];
 
     $produto = new Produto($nome, $preco, $descricao, $quantidade, $fornecedor_id);
     
+    // Revisar mensagem de sucesso/erro
     if ($produto->salvar()) {
         echo "Produto cadastrado com sucesso!";
     } else {
