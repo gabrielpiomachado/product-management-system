@@ -35,7 +35,7 @@ require 'includes/db.php';
                         <a class="nav-link" href="auth/cadastro_fornecedor.php">Cadastrar Fornecedor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cesta de Produtos</a>
+                        <a class="nav-link" href="auth/cesta_produtos.php">Cesta de Produtos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="auth/logout.php">Logout</a>
@@ -49,22 +49,25 @@ require 'includes/db.php';
         <h1>Bem-vindo, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
         
         <h2 class="mt-5">Lista de Produtos</h2>
-        
-        <table class="table table-striped mt-3">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Preço</th>
-                    <th>Quantidade</th>
-                    <th>Fornecedor</th>
-                    <th>Descrição</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="produtos-lista">
-                <!-- Produtos serão carregados via AJAX -->
-            </tbody>
-        </table>
+        <form id="form-cesta" method="POST">
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Selecionar</th>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Quantidade</th>
+                        <th>Fornecedor</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="produtos-lista">
+                    <!-- Produtos serão carregados via AJAX -->
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" id="enviar-cesta">Enviar para a Cesta</button>
+        </form>
     </div>
 
     <?php include 'views/footer.php'; ?>

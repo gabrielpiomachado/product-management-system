@@ -19,7 +19,7 @@
                     <a class="nav-link" href="cadastro_fornecedor.php">Cadastrar Fornecedor</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cesta de Produtos</a>
+                    <a class="nav-link" href="cesta_produtos.php">Cesta de Produtos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>

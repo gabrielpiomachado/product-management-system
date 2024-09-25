@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+session_start();
 require 'includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     foreach ($produtos as $produto) {
         echo "
             <tr>
+                <td><input type='checkbox' name='produtos_selecionados[]' value='{$produto['id']}'></td>
                 <td>{$produto['nome']}</td>
                 <td>R$ " . number_format($produto['preco'], 2, ',', '.') . "</td>
                 <td>{$produto['quantidade']}</td>
@@ -30,12 +32,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Ação para excluir o produto
     if ($_POST['action'] == 'delete' && isset($_POST['id'])) {
-        // Deletar o produto pelo ID
         $id = $_POST['id'];
         $stmt = $pdo->prepare("DELETE FROM produtos WHERE id = ?");
         $stmt->execute([$id]);
         echo "Produto excluído com sucesso!";
+        exit(); // Adiciona exit para parar a execução aqui
+    }
+    
+    // Ação para adicionar produtos à cesta
+    if ($_POST['action'] == 'adicionar_cesta' && !empty($_POST['produtos_selecionados'])) {
+        $produtosSelecionados = $_POST['produtos_selecionados'];
+
+        // Associar a cesta ao usuário autenticado
+        $user_id = $_SESSION['user_id'];
+        if (!isset($_SESSION['cesta'])) {
+            $_SESSION['cesta'] = [];
+        }
+
+        foreach ($produtosSelecionados as $produto_id) {
+            // Verificar se o produto já está na cesta para evitar duplicatas
+            if (!in_array($produto_id, $_SESSION['cesta'])) {
+                $_SESSION['cesta'][] = $produto_id;
+            }
+        }
+
+        echo "Produtos enviados para a cesta com sucesso!";
+        exit(); // Para garantir que a execução pare aqui também
     }
 }
 ?>
