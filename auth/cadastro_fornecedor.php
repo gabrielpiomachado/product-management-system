@@ -1,7 +1,10 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
 
 require '../includes/db.php';
 require 'Fornecedor.php';
@@ -16,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     try {
         $fornecedor = new Fornecedor($nome, $contato, $cnpj);
-
+        
         if ($fornecedor->salvar()) {
             $message = "Fornecedor cadastrado com sucesso!";
             $alert_class = 'alert-success';
@@ -64,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <button type="submit" class="btn btn-primary">Cadastrar Fornecedor</button>
         </form>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mask-plugin/1.14.16/jquery.mask.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $('#contato').mask('(00) 0000-0000'); // Máscara para o telefone
-        $('#cnpj').mask('00.000.000/0000-00'); // Máscara para o CNPJ
-    });
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mask-plugin/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#contato').mask('(00) 0000-0000'); // Máscara para o telefone
+            $('#cnpj').mask('00.000.000/0000-00'); // Máscara para o CNPJ
+        });
+    </script>
 
     </div>
     <?php include '../views/footer.php'; ?>

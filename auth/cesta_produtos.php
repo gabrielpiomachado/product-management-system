@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: auth/login.php');
+    header('Location: login.php');
     exit();
 }
 
@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remover'])) {
 
 /// Exibe os produtos na cesta, se houver
 $cestaProdutos = [];
-$totalCesta = 0; // Variável para armazenar o valor total da cesta
-$totalQuantidade = 0; // Variável para armazenar a quantidade total de itens
+$totalCesta = 0;
+$totalQuantidade = 0;
 
 if (!empty($_SESSION['cesta'])) {
     // Pega os IDs dos produtos na cesta

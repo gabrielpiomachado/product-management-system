@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 require '../includes/db.php';
 
 class Fornecedor {
@@ -24,7 +31,7 @@ class Fornecedor {
 
     // Valida o formato do contato (99) 9999-9999
     private function validarContato() {
-        return preg_match("/^\(\d{2}\) \d{4}-\d{4}$/", $this->contato);  // Alterado para o formato (99) 9999-9999
+        return preg_match("/^\(\d{2}\) \d{4}-\d{4}$/", $this->contato);
     }
 
     // Valida o formato do CNPJ 99.999.999/0001-99

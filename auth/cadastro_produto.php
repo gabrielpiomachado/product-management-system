@@ -1,4 +1,14 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$message = '';
+$alert_class = '';
+
 require '../includes/db.php';
 require 'Produto.php';
 
@@ -15,11 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $produto = new Produto($nome, $preco, $descricao, $quantidade, $fornecedor_id);
     
-    // Revisar mensagem de sucesso/erro
     if ($produto->salvar()) {
-        echo "Produto cadastrado com sucesso!";
+        $message = "Produto cadastrado com sucesso!";
+        $alert_class = 'alert-success';
     } else {
-        echo "Erro ao cadastrar produto.";
+        $message = "Erro ao cadastrar produto.";
+        $alert_class = 'alert-danger';
     }
 }
 ?>
@@ -37,6 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include '../views/header.php'; ?>
     <div class="container mt-5">
         <h2>Cadastro de Produto</h2>
+        <?php if ($message): ?>
+            <div class="alert <?php echo $alert_class; ?>" role="alert">
+                <?php echo $message; ?>
+            </div>
+        <?php endif; ?>
         <form method="POST">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome do Produto</label>

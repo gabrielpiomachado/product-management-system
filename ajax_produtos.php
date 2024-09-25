@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $pdo->prepare("DELETE FROM produtos WHERE id = ?");
         $stmt->execute([$id]);
         echo "Produto excluído com sucesso!";
-        exit(); // Adiciona exit para parar a execução aqui
+        exit();
     }
     
     // Ação para adicionar produtos à cesta
@@ -52,14 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         foreach ($produtosSelecionados as $produto_id) {
-            // Verificar se o produto já está na cesta para evitar duplicatas
+            // Verificar se o produto já está na cesta
             if (!in_array($produto_id, $_SESSION['cesta'])) {
                 $_SESSION['cesta'][] = $produto_id;
             }
         }
 
         echo "Produtos enviados para a cesta com sucesso!";
-        exit(); // Para garantir que a execução pare aqui também
+        exit();
     }
 }
 ?>

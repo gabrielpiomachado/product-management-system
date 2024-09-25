@@ -8,10 +8,12 @@ try {
     $pdo = new PDO("mysql:host=$host", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
+    // Criando o banco caso não exista
     $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     
     $pdo->exec("USE $dbname");
-
+    
+    // Criando a tabela users caso não exista
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,6 +25,7 @@ try {
         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     ");
 
+    // Criando a tabela fornecedores caso não exista
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS fornecedores (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,6 +36,7 @@ try {
         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     ");
 
+    // Criando a tabela produtos caso não exista
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS produtos (
             id INT AUTO_INCREMENT PRIMARY KEY,

@@ -1,24 +1,24 @@
 $(document).ready(function() {
-    // Função para carregar os produtos via AJAX
+    // Função para carregar os produtos
     function carregarProdutos() {
         $.ajax({
-            url: '/TrabalhoPelegrin/ajax_produtos.php',
+            url: ajaxUrl,  // Usando o caminho dinâmico definido no PHP
             type: 'GET',
             success: function(response) {
-                $('#produtos-lista').html(response);  // Atualiza a lista de produtos
+                $('#produtos-lista').html(response);
             }
         });
     }
 
     // Função para deletar um produto
-    window.deletarProduto = function(id) { // Mudança aqui para ser acessível globalmente
+    window.deletarProduto = function(id) {
         if (confirm('Tem certeza que deseja excluir este produto?')) {
             $.ajax({
-                url: '/TrabalhoPelegrin/ajax_produtos.php',
+                url: ajaxUrl,  // Usando o caminho dinâmico
                 type: 'POST',
                 data: { action: 'delete', id: id },
                 success: function(response) {
-                    alert(response); // Mostra a mensagem de sucesso
+                    alert(response);
                     carregarProdutos();  // Recarrega a lista de produtos após excluir
                 },
                 error: function() {
@@ -37,7 +37,7 @@ $(document).ready(function() {
 
         if (produtosSelecionados.length > 0) {
             $.ajax({
-                url: '/TrabalhoPelegrin/ajax_produtos.php',
+                url: ajaxUrl,  // Usando o caminho dinâmico
                 type: 'POST',
                 data: { action: 'adicionar_cesta', produtos_selecionados: produtosSelecionados },
                 success: function(response) {
