@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 <td>{$produto['fornecedor']}</td>
                 <td>{$produto['descricao']}</td>
                 <td>
-                    <button class='btn btn-warning' onclick='editarProduto({$produto['id']})'>Editar</button>
+                    <a href='auth/editar_produto.php?id={$produto['id']}' class='btn btn-warning'>Editar</a>
                     <button class='btn btn-danger' onclick='deletarProduto({$produto['id']})'>Excluir</button>
                 </td>
             </tr>
