@@ -8,14 +8,26 @@ if (!isset($_SESSION['user_id'])) {
 
 require '../includes/db.php';
 
+// Verifica se um produto deve ser removido da cesta
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remover'])) {
+    $produtoId = intval($_POST['produto_id']);
+    if (isset($_SESSION['cesta']) && in_array($produtoId, $_SESSION['cesta'])) {
+        // Remove o produto da cesta
+        $_SESSION['cesta'] = array_diff($_SESSION['cesta'], [$produtoId]);
+    }
+}
+
 /// Exibe os produtos na cesta, se houver
 $cestaProdutos = [];
+$totalCesta = 0; // Variável para armazenar o valor total da cesta
+$totalQuantidade = 0; // Variável para armazenar a quantidade total de itens
+
 if (!empty($_SESSION['cesta'])) {
     // Pega os IDs dos produtos na cesta
     $produtosIds = implode(',', array_map('intval', $_SESSION['cesta']));
 
     // Consulta para buscar detalhes dos produtos na cesta
-    $stmt = $pdo->query("SELECT id, nome, preco, descricao FROM produtos WHERE id IN ($produtosIds)");
+    $stmt = $pdo->query("SELECT id, nome, preco, quantidade, descricao FROM produtos WHERE id IN ($produtosIds)");
     $cestaProdutos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
@@ -41,19 +53,43 @@ if (!empty($_SESSION['cesta'])) {
                     <tr>
                         <th>Nome</th>
                         <th>Preço</th>
+                        <th>Quantidade</th>
                         <th>Descrição</th>
+                        <th>Total</th>
+                        <th>Remover</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($cestaProdutos as $produto): ?>
+                    <?php foreach ($cestaProdutos as $produto): 
+                        $subtotal = $produto['preco'] * $produto['quantidade']; // Cálculo do subtotal
+                        $totalCesta += $subtotal; // Soma ao total da cesta
+                        $totalQuantidade += $produto['quantidade']; // Soma ao total de quantidades
+                    ?>
                         <tr>
                             <td><?php echo htmlspecialchars($produto['nome']); ?></td>
                             <td>R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></td>
+                            <td><?php echo $produto['quantidade']; ?></td>
                             <td><?php echo htmlspecialchars($produto['descricao']); ?></td>
+                            <td>R$ <?php echo number_format($subtotal, 2, ',', '.'); ?></td>
+                            <td>
+                                <form method="POST">
+                                    <input type="hidden" name="produto_id" value="<?php echo $produto['id']; ?>">
+                                    <button type="submit" name="remover" class="btn btn-danger">Retirar Produto</button>
+                                </form>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total de Itens na Cesta:</strong></td>
+                        <td><strong><?php echo $totalQuantidade; ?></strong></td>
+                        <td><strong>Valor Total da Cesta:</strong></td>
+                        <td colspan="2"><strong>R$ <?php echo number_format($totalCesta, 2, ',', '.'); ?></strong></td>
+                    </tr>
+                </tfoot>
             </table>
+
         <?php else: ?>
             <p>Cesta vazia.</p>
         <?php endif; ?>
